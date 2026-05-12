@@ -1,7 +1,7 @@
 import './style.css'
 import { Inspector } from 'three/addons/inspector/Inspector.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { EquirectangularReflectionMapping, Timer } from 'three/webgpu'
+import { AmbientLight, Controls, DirectionalLight, EquirectangularReflectionMapping, Timer } from 'three/webgpu'
 
 import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
 import * as THREE from 'three';
@@ -27,6 +27,11 @@ async function main () {
   envMap.mapping = EquirectangularReflectionMapping
   scene.background = envMap
   scene.environment = envMap
+
+  const directionalLight = new DirectionalLight() 
+  const ambientLight = new AmbientLight(0x404040)
+  scene.add(ambientLight)
+  scene.add(directionalLight)
   
   const loader = new GLTFLoader()
   const gltf = await loader.loadAsync(sceneUrl)
@@ -43,6 +48,8 @@ async function main () {
   lightMapTexture.channel = 0;
 
   const tower = model.getObjectByName('Sketchfab_model');
+
+  const cat_wizard = model.getObjectByName('Sketchfab_model.001');
   
   if (tower) {
     tower.traverse((child) => {
@@ -80,6 +87,7 @@ async function main () {
     const delta = timer.getDelta()
 
     tower.rotation.z += 0.0 * delta   
+    // cat_wizard.rotation.z += 0.0 * delta
  
     controls.update()
 
